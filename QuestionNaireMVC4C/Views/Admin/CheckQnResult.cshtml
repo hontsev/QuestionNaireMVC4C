@@ -1,0 +1,403 @@
+﻿@{
+    ViewBag.Title = "问卷结果";
+    Layout = "~/Views/_Layout.cshtml";
+}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <h4>@ViewBag.res.title 结果分析</h4><hr />
+            <div id="results" class="col-lg-12">
+            </div>
+
+
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<script>
+
+    function getStarLevel(data) {
+        //if (data.length < 4) return 0;
+        console.log(data);
+
+        a = 0;
+        for (i = 0; i < data.length; i++) {
+            a += parseInt(data[i][1]);
+        }
+        b = 0;
+        for (i = 0; i < data.length; i++) {
+            b += parseInt(data[i][2]);
+        }
+        c = 0;
+        for (i = 0; i < data.length; i++) {
+            c += parseInt(data[i][3]);
+        }
+        d = 0;
+        for (i = 0; i < data.length; i++) {
+            d += parseInt(data[i][4]);
+        }
+        sum = a + b + c + d;
+
+        ab = parseFloat((a + b) / sum);
+        d = parseFloat(d / sum);
+        console.log(ab);
+        console.log(ab>0.9);
+
+        if (d >= 0.3) {
+            return 1;
+        } else if (ab >= 0.9) {
+            if (d > 0.05) {
+                return 4;
+            } else {
+                return 5;
+            }
+        } else if (ab >= 0.7) {
+            if ( d> 0.1) {
+                return 3;
+            } else {
+                return 4;
+            }
+        } else if (ab >= 0.5) {
+            if (d > 0.1) {
+                return 2;
+            } else {
+                return 3;
+            }
+        } else if (ab >= 0.3) {
+            if (d > 0.2) {
+                return 1;
+            } else {
+                return 2;
+            }
+        } else {
+            return 1;
+        }
+    }
+
+    function drawAnswer(title,type, data , star_target) {
+        results = $("#results");
+        num = results.find(".panel-default").length + 1;
+        html = "";
+
+        //console.log(data);
+
+        html += '<div class="panel panel-default"><div class="panel-heading">' + num + '.' + title + '</div><div class="panel-body">';
+
+        //评级
+        if (type == "1" ) {
+
+
+            sum = 0;
+            for (i = 0; i < data.length; i++) {
+                sum += parseInt(data[i][1]);
+            }
+            for (i = 0; i < data.length; i++) {
+                data[i][1] = (parseInt(data[i][1]) / sum).toFixed(4);
+            }
+
+
+        }
+        else if (type == "4" || type == "5") {
+
+            
+
+            if (star_target.length >= 1) {
+                star = 0;
+                max_star = 5;
+                star = getStarLevel(data);
+
+                html += '<div class="col-md-12"><label>' + star_target + ' 的评级结果：';
+                for (i = 0; i < max_star; i++) {
+                    if (i < star) {
+                        html += '<p class="fa fa-star"></p> ';
+                    } else {
+                        html += '<p class="fa fa-star-o"></p> ';
+                    }
+                }
+                html += star + ' 星 </label></div>';
+            }
+        }
+
+        html += '<div class="col-md-8"><canvas id="q_' + num + '" width="600" height="350">  浏览器不支持canvas  </canvas></div>  ';
+
+        if (type == "3") {
+            html += '<div class="col-md-4">';
+            for (q = 0; q < data.length; q++) {
+                for (r = 0; r < data[q].length; r++) {
+                    if (r == 1) html += ' : ';
+                    if (r > 1) html += ' , ';
+                    html += '<label> ' + data[q][r] + ' </label>';
+                }
+                html += '<br>';
+            }
+            html += '</div>';
+        }
+        //html += '<div class="col-md-4">';
+        //for (q = 0; q < data.length; q++) {
+        //    for (r = 0; r < data[q].length; r++) {
+        //        if (r == 1) html += ' : ';
+        //        if (r > 1) html += ' , ';
+        //        html += '<label> ' + data[q][r] + ' </label>';
+        //    }
+        //    html += '<br>';
+        //}
+        //html += '</div>';
+
+        html += '</div></div>';
+        results.append(html);
+        if (type == "1") {
+            //sum = 0;
+            //for (i = 0; i < data.length; i++) {
+            //    sum += parseInt(data[i][1]);
+            //}
+            //for (i = 0; i < data.length; i++) {
+            //    data[i][1] = (parseInt(data[i][1]) / sum).toFixed(4);
+            //}
+            drawCircle("q_" + num, data);
+        } else if (type == "2") {
+            maxl = 0;   //最大数量
+            maxlt = 0;  //最长选项字符数
+            for (i = 0; i < data.length; i++) {
+                if (parseInt(data[i][1]) > maxl) {
+                    maxl = parseInt(data[i][1]);
+                }
+                if (parseInt(data[i][0].length) > maxlt) {
+                    maxlt = parseInt(data[i][0].length);
+                }
+            }
+            drawBar("q_" + num, maxl, maxlt, data);
+        } else if (type == "3") { 
+            $("#q_" + num).parent().remove();
+            
+        } else if (type == "4" || type == "5") {
+            maxlt = 0;  //最长选项字符数
+            sum = new Array();
+            for (i = 0; i < data.length; i++) {
+                s = 0;
+                for (j = 1; j < data[0].length; j++) {
+                    s += parseInt(data[i][j]);
+                }
+                sum.push(s);
+                if (parseInt(data[i][0].length) > maxlt) {
+                    maxlt = parseInt(data[i][0].length);
+                }
+            }
+            for (i = 0; i < data.length; i++) {
+                for (j = 1; j < data[0].length; j++) {
+                    data[i][j] = (parseInt(data[i][j]) / sum[i]).toFixed(4);
+                }
+            }
+            drawBar2("q_" + num, maxlt, data);
+        }
+
+
+
+
+    }
+
+    function getColor(n) {
+        index = parseInt(n);
+        if (index == 0) {
+            return "#33FF33";
+        } else if (index == 1) {
+            return "#11BBEE";
+        } else if (index == 2) {
+            return "#3333FF";
+        } else if (index == 3) {
+            return "#FF33FF";
+        } else if (index == 4) {
+            return "#FF3333";
+        } else if (index == 5) {
+            return "#FF8833";
+        } else if (index == 6) {
+            return "#FFFF33";
+        } else {
+            return "#000";
+        }
+    }
+
+    function getWord(n) {
+        index = parseInt(n);
+        if (index == 1) {
+            return "非常满意";
+        } else if (index == 2) {
+            return "满意";
+        } else if (index == 3) {
+            return "一般";
+        } else if (index == 4) {
+            return "不满意";
+        }else {
+            return "？";
+        }
+    }
+
+    //饼图
+    function drawCircle(canvasId, data_arr) {
+        var c = document.getElementById(canvasId);
+        var ctx = c.getContext("2d");
+
+        var radius = c.height / 2 - 20; //半径
+        var ox = radius + 20, oy = radius + 20; //圆心
+
+        var width = 30, height = 10; //图例宽和高
+        var posX = ox * 2 + 20, posY = 30;   //
+        var textX = posX + width + 5, textY = posY + 10;
+
+        var startAngle = 0; //起始弧度
+        var endAngle = 0;   //结束弧度
+        for (var i = 0; i < data_arr.length; i++) {
+            //if (data_arr[i][1] == 0) continue;
+            //绘制饼图
+            endAngle = endAngle + data_arr[i][1] * Math.PI * 2; //结束弧度
+            ctx.fillStyle = getColor(i);
+            ctx.beginPath();
+            ctx.moveTo(ox, oy); //移动到到圆心
+            ctx.arc(ox, oy, radius, startAngle, endAngle, false);
+            ctx.closePath();
+            ctx.fill();
+
+            if (data_arr[i][1] > 0) {
+                ctx.font = 'bold 10px 微软雅黑';
+                ctx.fillStyle = "#fff";
+                ctx.fillText((100 * data_arr[i][1]).toFixed(2) + "%", ox + Math.cos((startAngle + endAngle) / 2) * radius * 0.7 - 10, oy + Math.sin((startAngle + endAngle) / 2) * radius * 0.7 + 5);
+
+            }
+
+            startAngle = endAngle; //设置起始弧度
+
+            //绘制比例图及文字
+            ctx.fillStyle = getColor(i);
+            ctx.fillRect(posX, posY + 20 * i, width, height);
+            ctx.moveTo(posX, posY + 20 * i);
+
+            ctx.font = 'bold 12px 微软雅黑';
+            ctx.fillStyle = "#666666";
+            var percent = data_arr[i][0];
+            ctx.fillText(percent, textX, textY + 20 * i);
+        }
+    }
+
+    //横向条形图
+    function drawBar(canvasId, maxlen,maxtextlen,data_arr) {
+        var c = document.getElementById(canvasId);
+        var ctx = c.getContext("2d");
+
+        var allheight = c.height - 40;
+        var height = allheight / (data_arr.length);
+        if (height > 40) height = 40;
+        var blankheight = 15;
+        if (height > blankheight) height -= blankheight;
+        var posX0 = 30, posY0 = 20;
+        var posX1 = posX0 + maxtextlen * 18;
+
+        for (var i = 0; i < data_arr.length; i++) {
+            posY1 = posY0 + i * (height + blankheight);
+            width = (c.width - posX1 - 30) * (data_arr[i][1] / maxlen);
+            dh = (height) / 2 + 5;
+
+            ctx.font = 'bold 15px 微软雅黑';
+            ctx.fillStyle = "#333";
+            ctx.fillText(data_arr[i][0], posX0, posY1 + dh);
+
+            //绘制图
+            ctx.fillStyle = "#6cf";
+            ctx.fillRect(posX1, posY1, width, height);
+
+            ctx.font = 'bold 15px 微软雅黑';
+            ctx.fillStyle = "#333";
+            ctx.fillText(data_arr[i][1], posX1 + width + 5, posY1 + dh);
+        }
+    }
+
+    //条形图2（矩阵单选结果）
+    function drawBar2(canvasId, maxtextlen, data_arr) {
+        var c = document.getElementById(canvasId);
+        var ctx = c.getContext("2d");
+
+        var allheight = c.height - 100;
+        var allwidth = c.width - 40;
+        var width = allwidth / (data_arr.length);
+        var blankwidth = 15;
+        if (width > 70) width = 70;
+        if (width > blankwidth) width -= blankwidth;
+        var posX0 = 20;
+        var posY0 = 30;
+
+        //图例
+        for (j = 1 ; j < data_arr[0].length; j++) {
+            posX = posX0 + j * 70;
+            posY = 15;
+            ctx.fillStyle = getColor(j);
+            ctx.fillRect(posX, posY, 10, 10);
+            ctx.font = 'bold 10px 微软雅黑';
+            ctx.fillStyle = "#333";
+            ctx.fillText(getWord(j), posX + 14, posY + 8);
+        }
+
+
+        for (var i = 0; i < data_arr.length; i++) {
+            posX = posX0 + i * (width + blankwidth);
+            posY = posY0;
+
+            //每个纵条
+            for (j = data_arr[i].length - 1; j > 0; j--) {
+                if (data_arr[i][j] <= 0) continue;
+                var height = allheight * data_arr[i][j] ;
+
+                ctx.fillStyle = getColor(j);
+                ctx.fillRect(posX, posY, width, height);
+
+                ctx.font = 'bold 10px 微软雅黑';
+                ctx.fillStyle = "#fff";
+                ctx.fillText((100 * data_arr[i][j]).toFixed(2) + "%", posX + 5, posY + height / 2 + 5);
+
+                posY += height;
+            }
+
+            posY += 30;
+            ctx.font = 'bold 12px 微软雅黑';
+            ctx.fillStyle = "#333";
+            len = 5;
+            row = data_arr[i][0].length / len;
+            for (j = 0; j < row; j++) {
+                if (j * len + len < data_arr[i][0].length)
+                    str = data_arr[i][0].substring(j * len, j * len + len);
+                else
+                    str = data_arr[i][0].substring(j * len);
+                ctx.fillText(str, posX, posY + j * 15);
+            }
+            
+        }
+    }
+
+
+    $(function () {
+         @{
+             if (!object.Equals(ViewBag.res, null))
+             {
+                 foreach (var q in ViewBag.res.answers)
+                 {
+                     @Html.Raw("var data=new Array();");
+                        for (int i = 0; i < q.options.GetLength(0); i++)
+                        {
+                            @Html.Raw("row=new Array();");
+                            for (int j = 0; j < q.options.GetLength(1); j++)
+                            {
+                                @Html.Raw("row.push('" + q.options[i,j] + "');");
+                            }
+                            @Html.Raw("data.push(row);");
+                        }
+                     @Html.Raw("drawAnswer('" + q.title + "','" + q.type + "',data,'" + q.star_target + "');");
+                 }
+             }
+         }
+
+    });
+
+
+</script>

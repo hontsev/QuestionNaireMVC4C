@@ -1,0 +1,395 @@
+﻿@{
+    ViewBag.Title = "编辑问卷";
+    Layout = "~/Views/_Layout.cshtml";
+}
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @ViewBag.Title
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <form role="form">
+                            <input type="hidden" id="qn_id" value="" />
+                            <div class="form-group">
+                                <label>问卷标题</label>
+                                <input class="form-control" id="qn_title">
+                            </div>
+                            <div class="form-group">
+                                <label>问卷简介</label>
+                                <textarea class="form-control" rows="3" id="qn_introduction"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>问题列表</label>
+
+                                <div class="panel panel-default">
+
+
+                                    <div class="panel-body">
+                                        <div id="questions">
+                                            @*<div class="panel-default">
+                                                    <div class="panel panel-heading">
+                                                        第 <label>1</label> 题 - 单选题 <a class="btn btn-danger">删除</a>
+                                                    </div>
+                                                    <div class="panel panel-body">
+                                                        <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？">
+                                                        <label class="col-lg-2">选项 1 </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                        <label class="col-lg-2">选项 2  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                        <label class="col-lg-2">选项 3  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                        <label class="col-lg-2">选项 4  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="panel-default">
+                                                    <div class="panel panel-heading">
+                                                        第 2 题 - 多选题
+                                                    </div>
+                                                    <div class="panel panel-body">
+                                                        <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"><br>
+                                                        <label class="col-lg-2">选项 1 </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                        <label class="col-lg-2">选项 2  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                        <label class="col-lg-2">选项 3  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                        <label class="col-lg-2">选项 4  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="panel-default">
+                                                    <div class="panel panel-heading">
+                                                        第 3 题 - 简答题
+                                                    </div>
+                                                    <div class="panel panel-body">
+                                                        <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"><br>
+                                                    </div>
+
+                                                </div>
+                                                <div class="panel-default">
+                                                    <div class="panel panel-heading">
+                                                        第 4 题 - 矩阵单选题
+                                                    </div>
+                                                    <div class="panel panel-body">
+                                                        <input class="form-control" value="评价各位老师。"><br>
+                                                        <div class="col-lg-5"><input class="form-control qn-item" value="老师一"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>
+                                                        <div class="col-lg-5"><input class="form-control qn-item" value="老师二"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>
+                                                        <div class="col-lg-10"><a class="btn btn-info" onclick="addItem(this)">+</a></div>
+                                                    </div>
+
+                                                </div>*@
+                                        </div>
+
+                                        <hr>
+                                        <div class="col-md-2">
+                                            <label> 问题类型</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" id="selectQType">
+                                                <option>单选题</option>
+                                                <option>多选题</option>
+                                                <option>简答题</option>
+                                                <option>矩阵单选题（评价教师）</option>
+                                                <option>矩阵单选题（评价课程）</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a type="button" class="btn btn-info" onclick="addQuestion()">
+                                                添加问题
+                                            </a>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="javascript:saveQn()" class="btn btn-primary">保存问卷</a>
+                            <button class="btn btn-default" onclick="history.go(-1)">返回</button>
+                            @*<a href="javascript:history.go(-1)" class="btn btn-default">返回</a>*@
+                        </form>
+                    </div>
+
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+
+
+<script>
+
+    function printQuestion(type, title, options, star_target) {
+
+        var q = $("#questions");
+        var num = q.find(".panel-default").length;
+        //console.log(num);
+        num += 1;
+        //console.log(type);
+        if (type == "1") {
+            elem = "";
+            elem += '<div class="panel-default">';
+            elem += '<div class="panel panel-heading">' + '第 <label>' + num + '</label> 题 - <font color="gray">单选题</font> <a class="btn btn-danger" onclick="deleteQuestion(this)">删除</a>' + '</div>';
+            elem += '<div class="panel panel-body">';
+            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br>';
+            //elem += '<div class="checkbox"><label><input type="checkbox" value="1"';
+            //if (parseInt(star_target) == 1) {
+            //    elem += ' checked="checked" ';
+            //}
+            //elem += '>作为星级评价题目</label></div><div class="alert alert-info"> 注意，如果勾选了本项，则在统计问卷结果时，系统会根据本题的前四个选项来给出评价星级，即认为前四个选项的结果依次为“非常满意”“满意”“一般”“不满意”。</div>';
+            //
+            var items = options.split(",");
+            for (i in items) {
+                elem += '<div class="col-lg-5"><input class="form-control qn-item" value="' + items[i] + '"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>';
+            }
+            elem += '<div class="col-lg-10"><a class="btn btn-info" onclick="addItem(this)">+</a></div>';
+            elem += '</div>';
+            elem += '</div>';
+            q.append(elem);
+        } else if (type == "2") {
+            elem = "";
+            elem += '<div class="panel-default">';
+            elem += '<div class="panel panel-heading">' + '第 <label>' + num + '</label> 题 - <font color="gray">多选题</font> <a class="btn btn-danger" onclick="deleteQuestion(this)">删除</a>' + '</div>';
+            elem += '<div class="panel panel-body">';
+            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br>';
+            var items = options.split(",");
+            for (i in items) {
+                elem += '<div class="col-lg-5"><input class="form-control qn-item" value="' + items[i] + '"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>';
+            }
+            elem += '<div class="col-lg-10"><a class="btn btn-info" onclick="addItem(this)">+</a></div>';
+            elem += '</div>';
+            elem += '</div>';
+            q.append(elem);
+        } else if (type == "3") {
+            elem = "";
+            elem += '<div class="panel-default">';
+            elem += '<div class="panel panel-heading">' + '第 <label>' + num + '</label> 题 - <font color="gray">简答题</font> <a class="btn btn-danger" onclick="deleteQuestion(this)">删除</a>' + '</div>';
+            elem += '<div class="panel panel-body">';
+            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br>';
+            elem += '</div>';
+            elem += '</div>';
+            q.append(elem);
+        } else if (type == "4") {
+            elem = "";
+            elem += '<div class="panel-default">';
+            elem += '<div class="panel panel-heading">' + '第 <label>' + num + '</label> 题 - <font color="gray">矩阵单选题（评价教师）</font> <a class="btn btn-danger" onclick="deleteQuestion(this)">删除</a>' + '</div>';
+            elem += '<div class="panel panel-body">';
+            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br>';
+            elem += '<label >教师姓名</label><input class="form-control" value="' + star_target + '" placeholder="输入待评价教师姓名"><br>';
+            elem += '<div class="alert alert-info"> 在这里编辑教师各项评价指标，系统已经将矩阵的四列的选项依次设置为“非常满意”“满意”“一般”“不满意”。</div>';
+            var items = options.split(",");
+            for(i in items)
+            {
+                elem+='<div class="col-lg-5"><input class="form-control qn-item" value="'+items[i]+'"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>';
+            }
+            elem += '<div class="col-lg-10"><a class="btn btn-info" onclick="addItem(this)">+</a></div>';
+            elem += '</div>';
+            elem += '</div>';
+            q.append(elem);
+        } else if (type == "5") {
+            elem = "";
+            elem += '<div class="panel-default">';
+            elem += '<div class="panel panel-heading">' + '第 <label>' + num + '</label> 题 - <font color="gray">矩阵单选题（评价课程）</font> <a class="btn btn-danger" onclick="deleteQuestion(this)">删除</a>' + '</div>';
+            elem += '<div class="panel panel-body">';
+            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br>';
+            elem += '<label >课程编码</label><input class="form-control" value="' + star_target + '" placeholder="输入待评价课程编码"><br>';
+            elem += '<div class="alert alert-info"> 在这里编辑课程各项评价指标，系统已经将矩阵的四列的选项依次设置为“非常满意”“满意”“一般”“不满意”。</div>';
+            var items = options.split(",");
+            for (i in items) {
+                elem += '<div class="col-lg-5"><input class="form-control qn-item" value="' + items[i] + '"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>';
+            }
+            elem += '<div class="col-lg-10"><a class="btn btn-info" onclick="addItem(this)">+</a></div>';
+            elem += '</div>';
+            elem += '</div>';
+            q.append(elem);
+        }
+    }
+
+    //添加一道题
+    function addQuestion() {
+        var type = $("#selectQType").val();
+        var typenum = "";
+        if (type == "单选题") typenum = "1";
+        else if (type == "多选题") typenum = "2";
+        else if (type == "简答题") typenum = "3";
+        else if (type == "矩阵单选题（评价教师）") typenum = "4";
+        else if (type == "矩阵单选题（评价课程）") typenum = "5";
+        printQuestion(typenum, "", "", "");
+    }
+
+    function deleteQuestion(elem) {
+        num = parseInt($(elem).prev().prev().text());
+        if (!confirm("要删除第" + num + "题吗？")) return;
+        $("#questions").find(".panel-default").each(function () {
+            nownum = parseInt($(this).find(".panel-heading").first().find("label").text());
+            if (nownum == num) {
+                //delete
+                $(this).remove();
+            } else if(nownum > num){
+                $(this).find(".panel-heading").first().find("label").text(nownum - 1);
+            }
+        });
+
+    }
+
+    //选择题里添加一行
+    function addItem(elem) {
+        var e = $(elem).parent();
+        e.before('<div class="col-lg-5"><input class="form-control qn-item" value=""></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>');
+    }
+
+    function deleteItem(elem) {
+        var a = $(elem).parent();
+        var b = a.prev();
+        a.remove();
+        b.remove();
+    }
+
+    //保存问卷
+    function saveQn() {
+
+        if ($('#qn_title').val().length <= 0 || $("#qn_introduction").val().length <= 0) {
+            alert("请填写问卷名称与简介。");
+            return false;
+        } else if ($("#questions").find(".panel-default").length <= 0) {
+            alert("问卷请至少添加一道题目！");
+            return false;
+        }
+
+        var qs = new Array();
+
+        $("#questions").find(".panel-default").each(function () {
+            var q = new Object();
+            q.id = 0;
+            q.type = "";
+            q.title = "";
+            q.options = "";
+            q.star_target = "";
+            num = parseInt($(this).find(".panel-heading").first().find("label").text());
+            type = $(this).find(".panel-heading").first().find("font").first().text();
+            console.log(type);
+            if (type == "单选题") {
+                input = $(this).find("input");
+                title = input.val();
+                options = "";
+                $(this).find(".qn-item").each(function () {
+                    options += $(this).val() + ",";
+                });
+                if (options.length > 0) options = options.substring(0, options.length - 1);
+                //if($(this).find("input[type='checkbox']").first().is(':checked')){
+                //    is_starlevel = "1";
+                //} else {
+                //    is_starlevel = "0";
+                //}
+                q.id = num;
+                q.type = "1";
+                q.title = title;
+                q.options = options;
+                //q.is_starlevel = is_starlevel;
+            } else if (type == "多选题") {
+                input = $(this).find("input");
+                title = input.val();
+                options = "";
+                $(this).find(".qn-item").each(function () {
+                    options += $(this).val() + ",";
+                });
+                if (options.length > 0) options = options.substring(0, options.length - 1);
+
+                q.id = num;
+                q.type = "2";
+                q.title = title;
+                q.options = options;
+            } else if (type == "简答题") {
+                input = $(this).find("input");
+                title = input.val();
+                q.id = num;
+                q.type = "3";
+                q.title = title;
+            } else if (type == "矩阵单选题（评价教师）") {
+                input = $(this).find("input");
+                title = input.eq(0).val();
+                star_target = input.eq(1).val();
+                options = "";
+                $(this).find(".qn-item").each(function () {
+                    options += $(this).val() + ",";
+                });
+                if (options.length > 0) options = options.substring(0, options.length - 1);
+
+                q.id = num;
+                q.type = "4";
+                q.title = title;
+                q.options = options;
+                q.star_target = star_target;
+            } else if (type == "矩阵单选题（评价课程）") {
+                input = $(this).find("input");
+                title = input.eq(0).val();
+                star_target = input.eq(1).val();
+                options = "";
+                $(this).find(".qn-item").each(function () {
+                    options += $(this).val() + ",";
+                });
+                if (options.length > 0) options = options.substring(0, options.length - 1);
+                q.id = num;
+                q.type = "5";
+                q.title = title;
+                q.options = options;
+                q.star_target = star_target;
+            }
+
+            qs.push(q);
+        });
+
+        console.log(qs);
+
+        var res = {
+            id:$("#qn_id").val(),
+            title: $("#qn_title").val(),
+            introduction: $("#qn_introduction").val(),
+            questions: qs
+        };
+        console.log(res); //return;
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            url: '@Url.Action("SaveQn","Admin")',
+            data: JSON.stringify(res),
+            //async: false,
+            success: function (data) {
+                console.log(data.responseText);
+                if (data.responseText == "Success") {
+
+                    window.location.href = "@Url.Action("CheckQn","Admin")";
+                }
+                //console.debug(data);
+            },
+            error: function (data) {
+                console.log(data.responseText);
+                if (data.responseText == "Success") {
+
+                    window.location.href = "@Url.Action("CheckQn","Admin")";
+                }
+                //console.debug(data);
+            }
+        });
+    }
+
+
+
+    $(function () {
+        @{
+            if (!object.Equals(ViewBag.qn, null))
+            {
+                if (!object.Equals(ViewBag.qn.id,null))
+                {
+                    @Html.Raw("$('#qn_id').val('" + ViewBag.qn.id + "');");
+                }
+                @Html.Raw("$('#qn_title').val('" + ViewBag.qn.title + "');");
+                @Html.Raw("$('#qn_introduction').val('" + ViewBag.qn.introduction + "');");
+                foreach (var q in ViewBag.qn.questions)
+                {
+                    @Html.Raw("printQuestion('" + q.type + "','" + q.title + "','" + q.options + "','" + q.star_target + "');");
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,366 @@
+﻿@{
+    ViewBag.Title = "编辑课程";
+    Layout = "~/Views/_Layout.cshtml";
+}
+    <div class="modal fade" id="uploadWindow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">选择文件上传</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form" class="form-horizontal col-md-10" action="@Url.Action("UploadClassInfo","Admin")" method="post" enctype="multipart/form-data">
+                        <p>
+                            <a href="@Url.Content("/课程添加模板.xls")">课程添加模板.xls</a>
+                        </p>
+                        <input class="col-md-8" type="file" name="infofile" id="infofile" value="" />
+                        <input class="col-md-4 btn btn-primary " type="submit" value=" 开始上传" />
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @ViewBag.Title
+                <button class="btn btn-info" data-toggle="modal" data-target="#uploadWindow">批量导入课程信息</button>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <form id="infoform" role="form" class="form-horizontal" action="@Url.Action("SaveClassInfo","Admin")" method="post">
+                            <input type="hidden" name="id" id="id" value="" />
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>课程编号</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="c_id" id="c_id">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>课程名称</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="c_name" id="c_name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>课程学时</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="c_hours" id="c_hours">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>开课时间</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="c_date" id="c_date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>所属专业</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="c_major" id="c_major">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>项目名称</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="p_name" id="p_name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>项目关键词</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="p_key" id="p_key">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>项目属性</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="p_type" id="p_type">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>学员类别</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="s_type" id="s_type">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>学员人数</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="s_num" id="s_num">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>课程简介</label>
+                                    <textarea class="form-control" rows="3" name="c_info" id="c_info"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>课程综合评价</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="c_eva">课程综合评价</label>
+                                        @*<input class="form-control" name="c_eva" id="qn_title">*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>线下评价</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="c_offlineeva" id="c_offlineeva">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师姓名</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_name" id="t_name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师职称</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_position" id="t_position">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师所在单位</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_place" id="t_place">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_email" id="t_email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>办公电话</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_phone" id="t_phone">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>手机电话</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_mobilephone" id="t_mobilephone">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>其他联系方式</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_other" id="t_other">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>教师简介</label>
+                                    <textarea class="form-control" rows="3" name="t_info" id="t_info"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>完成授课次数</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_complete"></label>
+                                        @*<input class="form-control" name="t_complete" id="t_complete">*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>授课状态</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_state" id="t_state">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师综合评价</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_eva"></label>
+                                        @*<input class="form-control" id="qn_title">*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师出生年月</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_birthday" id="t_birthday">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>身份证号码</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_idnum" id="t_idnum">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>开户行</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_bank" id="t_bank">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>银行卡号</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_bankid" id="t_bankid">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>第三方支付</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" name="t_thirdpay" id="t_thirdpay">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                        <button class="btn btn-primary" onclick="submitform()">保存课程信息</button>
+                        <button class="btn btn-default" onclick="history.go(-1)">返回</button>
+                    </div>
+
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+
+
+<script>
+
+    function submitform() {
+        if (confirm("确实要保存此课程信息吗？")) {
+            $("#infoform").submit();
+        }
+    }
+
+    $(function () {
+        @{
+            if (!object.Equals(ViewBag.info, null))
+            {
+                if (!object.Equals(ViewBag.info[0], null))
+                {
+                    @Html.Raw("$('#id').val('" + ViewBag.info[0] + "');");
+                }
+                @Html.Raw("$('#c_id').val('" + ViewBag.info[1] + "');");
+                @Html.Raw("$('#c_name').val('" + ViewBag.info[2] + "');");
+            @Html.Raw("$('#c_hours').val('" + ViewBag.info[3] + "');");
+            @Html.Raw("$('#c_date').val('" + ViewBag.info[4] + "');");
+            @Html.Raw("$('#c_major').val('" + ViewBag.info[5] + "');");
+            @Html.Raw("$('#p_name').val('" + ViewBag.info[6] + "');");
+            @Html.Raw("$('#p_key').val('" + ViewBag.info[7] + "');");
+            @Html.Raw("$('#p_type').val('" + ViewBag.info[8] + "');");
+            @Html.Raw("$('#s_type').val('" + ViewBag.info[9] + "');");
+            @Html.Raw("$('#s_num').val('" + ViewBag.info[10] + "');");
+            @Html.Raw("$('#c_info').html('" + ViewBag.info[22] + "');");
+            @Html.Raw("$('#c_eva').html('" + ViewBag.info[23] + "');");
+            @Html.Raw("$('#c_offlineeva').val('" + ViewBag.info[29] + "');");
+            @Html.Raw("$('#t_name').val('" + ViewBag.info[11] + "');");
+            @Html.Raw("$('#t_position').val('" + ViewBag.info[12] + "');");
+            @Html.Raw("$('#t_place').val('" + ViewBag.info[13] + "');");
+            @Html.Raw("$('#t_email').val('" + ViewBag.info[14] + "');");
+            @Html.Raw("$('#t_phone').val('" + ViewBag.info[15] + "');");
+            @Html.Raw("$('#t_mobilephone').val('" + ViewBag.info[16] + "');");
+            @Html.Raw("$('#t_other').val('" + ViewBag.info[17] + "');");
+            @Html.Raw("$('#t_info').val('" + ViewBag.info[18] + "');");
+            @Html.Raw("$('#t_complete').html('" + ViewBag.info[19] + "');");
+            @Html.Raw("$('#t_state').val('" + ViewBag.info[20] + "');");
+            @Html.Raw("$('#t_eva').html('" + ViewBag.info[21] + "');");
+            @Html.Raw("$('#t_birthday').val('" + ViewBag.info[24] + "');");
+            @Html.Raw("$('#t_idnum').val('" + ViewBag.info[25] + "');");
+            @Html.Raw("$('#t_bank').val('" + ViewBag.info[26] + "');");
+            @Html.Raw("$('#t_bankid').val('" + ViewBag.info[27] + "');");
+            @Html.Raw("$('#t_thirdpay').val('" + ViewBag.info[28] + "');");
+            }
+        }
+    });
+</script>

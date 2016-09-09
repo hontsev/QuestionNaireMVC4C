@@ -1,0 +1,276 @@
+﻿@{
+    ViewBag.Title = "查看课程详情";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @ViewBag.Title
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <form role="form" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>课程编号</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="c_id"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>课程名称</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="c_name"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>课程学时</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="c_hours"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>开课时间</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="c_date"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>所属专业</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="c_major"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>项目名称</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="p_name"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>项目关键词</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="p_key"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>项目属性</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="p_type"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>学员类别</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="s_type"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>学员人数</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="s_num"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>课程简介</label>
+                                    <p id="c_info"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>课程综合评价</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="c_eva"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>线下评价</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="c_offlineeva"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师姓名</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_name"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师职称</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_position"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师所在单位</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_place"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_email"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>办公电话</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_phone"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>手机电话</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_mobilephone"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>其他联系方式</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_other"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>教师简介</label>
+                                    <p id="t_info"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>完成授课次数</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_complete"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>授课状态</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_state"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label>教师综合评价</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label id="t_eva"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        <button class="btn btn-default" onclick="history.go(-1)">返回</button>
+                    </div>
+
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+
+
+<script>
+
+    $(function () {
+        @{
+            if (!object.Equals(ViewBag.info, null))
+            {
+                @Html.Raw("$('#c_id').html('" + ViewBag.info[1] + "');");
+                @Html.Raw("$('#c_name').html('" + ViewBag.info[2] + "');");
+            @Html.Raw("$('#c_hours').html('" + ViewBag.info[3] + "');");
+            @Html.Raw("$('#c_date').html('" + ViewBag.info[4] + "');");
+            @Html.Raw("$('#c_major').html('" + ViewBag.info[5] + "');");
+            @Html.Raw("$('#p_name').html('" + ViewBag.info[6] + "');");
+            @Html.Raw("$('#p_key').html('" + ViewBag.info[7] + "');");
+            @Html.Raw("$('#p_type').html('" + ViewBag.info[8] + "');");
+            @Html.Raw("$('#s_type').html('" + ViewBag.info[9] + "');");
+            @Html.Raw("$('#s_num').html('" + ViewBag.info[10] + "');");
+            @Html.Raw("$('#c_info').html('" + ViewBag.info[22] + "');");
+            @Html.Raw("$('#c_eva').html('" + ViewBag.info[23] + "');");
+            @Html.Raw("$('#c_offlineeva').html('" + ViewBag.info[29] + "');");
+            @Html.Raw("$('#t_name').html('" + ViewBag.info[11] + "');");
+            @Html.Raw("$('#t_position').html('" + ViewBag.info[12] + "');");
+            @Html.Raw("$('#t_place').html('" + ViewBag.info[13] + "');");
+            @Html.Raw("$('#t_email').html('" + ViewBag.info[14] + "');");
+            @Html.Raw("$('#t_phone').html('" + ViewBag.info[15] + "');");
+            @Html.Raw("$('#t_mobilephone').html('" + ViewBag.info[16] + "');");
+            @Html.Raw("$('#t_other').html('" + ViewBag.info[17] + "');");
+            @Html.Raw("$('#t_info').html('" + ViewBag.info[18] + "');");
+            @Html.Raw("$('#t_complete').html('" + ViewBag.info[19] + "');");
+            @Html.Raw("$('#t_state').html('" + ViewBag.info[20] + "');");
+            @Html.Raw("$('#t_eva').html('" + ViewBag.info[21] + "');");
+            }
+        }
+    });
+</script>
