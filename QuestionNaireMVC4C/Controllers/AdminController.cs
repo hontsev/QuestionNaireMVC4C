@@ -48,6 +48,8 @@ namespace QuestionNaireMVC4C.Controllers
     }
     public class Result
     {
+        //参与人数
+        public int number { get; set; }
         public string id { get; set; }
         public string title { get; set; }
         public List<QResult> answers { get; set; }
@@ -121,6 +123,37 @@ namespace QuestionNaireMVC4C.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 获取问卷回答数目。
+        /// </summary>
+        /// <returns></returns>
+        public int getAnswerNumber(string qnid)
+        {
+            int num = 0;
+
+            string sql = string.Format("SELECT id FROM question WHERE belong_qn='{0}'", qnid);
+            var q = DB.GetResult(sql).Rows;
+            if (q.Count <= 0)
+            {
+                //这个问卷没有题。
+                num = 0;
+            }
+            else
+            {
+                string qid = q[0][0].ToString();
+                sql = string.Format("SELECT count(id) FROM answer WHERE belong_q='{0}'", qid);
+                string numstr = DB.GetResult(sql).Rows[0][0].ToString();
+                num = Int32.Parse(numstr);
+            }
+
+            return num;
+        }
+
+        /// <summary>
+        /// 统计问卷结果
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult CheckQnResult(string id)
         {
             updateStarLevel(id);
@@ -131,6 +164,7 @@ namespace QuestionNaireMVC4C.Controllers
             res.answers = new List<QResult>();
             res.id = qn[0].ToString();
             res.title = qn[1].ToString();
+            res.number = getAnswerNumber(res.id);
             sql = string.Format("SELECT id,introduction,type,options,star_target FROM question WHERE belong_qn='{0}'", res.id);
             var qs = DB.GetResult(sql).Rows;
 
@@ -183,7 +217,7 @@ namespace QuestionNaireMVC4C.Controllers
                         qres.options = new string[a4.Count, 1];
                         for (int k = 0; k < a4.Count; k++)
                         {
-                            qres.options[k, 0] = a4[k][0].ToString();
+                            qres.options[k, 0] = a4[k][0].ToString().Replace("\r", "").Replace("\n", "");
                         }
 
                         break;
@@ -543,6 +577,61 @@ namespace QuestionNaireMVC4C.Controllers
         }
 
         /// <summary>
+        /// 检查一道题的选项里是不是有指定老师
+        /// 这是为了判断这道题哪个选项用来统计指定老师的星级评价
+        /// 返回所在位置。没有返回-1
+        /// </summary>
+        /// <param name="optionsString"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public int checkTeacherIndexInQuestion(string optionsString, string name)
+        {
+            string[] tmp = optionsString.Split(',');
+            for (int i = 0; i < tmp.Length; i++)
+            {
+                if (tmp[i] == name)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// 获取单个教师的星级评价
+        /// </summary>
+        /// <param name="teacher_name"></param>
+        public void setTeacherStarLevel(string teacher_name)
+        {
+            double[] times = new double[4];
+
+            string sql = string.Format("SELECT id,options FROM question WHERE type='4'");
+            var target_qs = DB.GetResult(sql).Rows;
+            for (int j = 0; j < target_qs.Count; j++)
+            {
+                //每道题都要统计。
+                int target_index = checkTeacherIndexInQuestion(target_qs[j][1].ToString(), teacher_name);
+                if (target_index == -1) continue;
+                string target_qid = target_qs[j][0].ToString();
+                sql = string.Format("SELECT answer FROM answer WHERE belong_q='{0}'", target_qid);
+                var a = DB.GetResult(sql).Rows;
+                for (int k = 0; k < a.Count; k++)
+                {
+                    string[] answerstr = a[k][0].ToString().Split(',');
+                    int ansint = Int32.Parse(answerstr[target_index]);
+                    times[ansint - 1]++;
+                }
+            }
+            int starLevel = getStarLevel(times);
+            if (starLevel > 0)
+            {
+                sql = string.Format("UPDATE Class_Teacher_Info SET Teachereva='{0}' WHERE Teachername='{1}'", starLevel.ToString() + "星", teacher_name);
+                DB.ExecuteSql(sql);
+            }
+                    
+        }
+
+        /// <summary>
         /// 更新课程和教师的星级，当一个问卷被关闭时触发结算。
         /// </summary>
         /// <param name="qnid"></param>
@@ -557,41 +646,21 @@ namespace QuestionNaireMVC4C.Controllers
             for (int i = 0; i < qs.Count; i++)
             {
                 string type = qs[i][2].ToString();
+                string[] options=qs[i][3].ToString().Split(',');
                 string star_target = qs[i][4].ToString();
                 string qid = qs[i][0].ToString();
                 if(type=="4")
                 {
                     // 教师评级
                     // 得把数据库里跟这个老师有关的所有内容一起拿出来然后评级。
-                    double[] times = new double[4];
-                    // 把一切有关这个老师的题都取出来
-                    sql = string.Format("SELECT id FROM question WHERE type='4' AND star_target='{0}'", star_target);
-                    var target_qs = DB.GetResult(sql).Rows;
-                    for (int j = 0; j < target_qs.Count; j++)
-                    {
-                        //每道题都要统计。
-                        string target_qid = target_qs[j][0].ToString();
-                        sql = string.Format("SELECT answer FROM answer WHERE belong_q='{0}'", target_qid);
-                        var a = DB.GetResult(sql).Rows;
-                        for (int k = 0; k < a.Count; k++)
-                        {
-                            string[] answerstr = a[k][0].ToString().Split(',');
-
-                            for (int l = 0; l < answerstr.Length; l++)
-                            {
-                                int ansint = Int32.Parse(answerstr[l]);
-                                times[ansint - 1]++;
-                            }
-                        }
-                    }
-                    int starLevel = getStarLevel(times);
-                    if (starLevel > 0)
-                    {
-                        sql = string.Format("UPDATE Class_Teacher_Info SET Teachereva='{0}' WHERE Teachername='{1}'", starLevel.ToString() + "星", star_target.Trim());
-                        DB.ExecuteSql(sql);
-                    }
                     
-
+                    // 针对本题涉及的所有老师，每个老师分别统计整个系统内与他相关的问卷的调查结果，然后综合这些问卷结果，计算星级。
+                    //找出本题涉及的老师名字们
+                    string[] target_names=options;
+                    foreach (string tname in target_names)
+                    {
+                        setTeacherStarLevel(tname);
+                    }
                 }
                 else if (type == "5")
                 {

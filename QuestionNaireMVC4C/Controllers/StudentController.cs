@@ -76,13 +76,14 @@ namespace QuestionNaireMVC4C.Controllers
                     {
                         int qnid = Int32.Parse(id);
 
-                        string uid = CheckIP.GetIP();
-                        sql = string.Format("SELECT answer.id FROM answer LEFT JOIN question  ON answer.belong_q=question.id WHERE belong_user='{0}' and question.belong_qn='{1}'", uid, qnid);
-                        if (DB.Exists(sql))
-                        {
-                            //此ip已经回答过此问题了。
-                            return RedirectToAction("Message", "Home", new { id = "您已回答了本问卷，感谢您的参与！" });
-                        }
+                        ////限制每个ip限答一次
+                        //string uid = CheckIP.GetIP();
+                        //sql = string.Format("SELECT answer.id FROM answer LEFT JOIN question  ON answer.belong_q=question.id WHERE belong_user='{0}' and question.belong_qn='{1}'", uid, qnid);
+                        //if (DB.Exists(sql))
+                        //{
+                        //    //此ip已经回答过此问题了。
+                        //    return RedirectToAction("Message", "Home", new { id = "您已回答了本问卷，感谢您的参与！" });
+                        //}
 
 
                         sql = string.Format("SELECT id,title,introduction FROM questionnaire WHERE id='{0}'", qnid);
@@ -168,14 +169,17 @@ namespace QuestionNaireMVC4C.Controllers
         [HttpPost]
         public ActionResult SubmitQn(List<Answer> answers)
         {
-            string uid = CheckIP.GetIP();
+            Random ra = new Random();
+            string uid = CheckIP.GetIP() + ra.Next(10000000, 99999999).ToString();
 
             string sql = "";
 
             foreach (var a in answers)
             {
-                sql = string.Format("DELETE FROM answer WHERE belong_user='{0}' AND belong_q='{1}'", uid, a.qid);
-                DB.ExecuteSql(sql);
+                ////删除此ip之前的回答记录
+                //sql = string.Format("DELETE FROM answer WHERE belong_user='{0}' AND belong_q='{1}'", uid, a.qid);
+                //DB.ExecuteSql(sql);
+                a.answer = a.answer.Replace("'", "\"");
                 sql = string.Format("INSERT INTO answer(answer,belong_user,belong_q) VALUES('{0}','{1}','{2}')", a.answer, uid, a.qid);
                 DB.ExecuteSql(sql);
             }

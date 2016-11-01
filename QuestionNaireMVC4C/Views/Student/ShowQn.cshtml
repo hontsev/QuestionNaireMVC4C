@@ -302,14 +302,14 @@
                 console.log(data.responseText);
                 if (data.responseText == "Success") {
 
-                    window.location.href = "@Url.Action("ShowQn", "Student", new { id = ViewBag.qn.id })";
+                    window.location.href = "@Url.Action("Message", "Home", new { id = "您已回答了本问卷，感谢您的参与！" })";
                 }
             },
             error: function (data) {
                 console.log(data.responseText);
                 if (data.responseText == "Success") {
 
-                    window.location.href = "@Url.Action("ShowQn", "Student", new { id = ViewBag.qn.id })";
+                    window.location.href = "@Url.Action("Message", "Home", new { id = "您已回答了本问卷，感谢您的参与！" })";
                 }
             }
         });

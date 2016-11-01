@@ -72,7 +72,6 @@ E:\OtherProjects\问卷系统\QuestionNaireMVC4C\QuestionNaireMVC4C\bin\zh-Hans\
 E:\OtherProjects\问卷系统\QuestionNaireMVC4C\QuestionNaireMVC4C\bin\zh-Hans\System.Web.WebPages.resources.dll
 E:\OtherProjects\问卷系统\QuestionNaireMVC4C\QuestionNaireMVC4C\bin\zh-Hans\System.Web.WebPages.Deployment.resources.dll
 E:\OtherProjects\问卷系统\QuestionNaireMVC4C\QuestionNaireMVC4C\bin\zh-Hans\System.Web.WebPages.Razor.resources.dll
-E:\OtherProjects\问卷系统\QuestionNaireMVC4C\QuestionNaireMVC4C\obj\Debug\QuestionNaireMVC4C.csprojResolveAssemblyReference.cache
 E:\OtherProjects\问卷系统\QuestionNaireMVC4C\QuestionNaireMVC4C\obj\Debug\QuestionNaireMVC4C.dll
 E:\OtherProjects\问卷系统\QuestionNaireMVC4C\QuestionNaireMVC4C\obj\Debug\QuestionNaireMVC4C.pdb
 E:\OtherProjects\问卷系统\QuestionNaireMVC4C\QuestionNaireMVC4C\bin\ICSharpCode.SharpZipLib.dll

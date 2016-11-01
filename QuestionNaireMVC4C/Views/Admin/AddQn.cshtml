@@ -174,8 +174,8 @@
             elem += '<div class="panel panel-heading">' + '第 <label>' + num + '</label> 题 - <font color="gray">矩阵单选题（评价教师）</font> <a class="btn btn-danger" onclick="deleteQuestion(this)">删除</a>' + '</div>';
             elem += '<div class="panel panel-body">';
             elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br>';
-            elem += '<label >教师姓名</label><input class="form-control" value="' + star_target + '" placeholder="输入待评价教师姓名"><br>';
-            elem += '<div class="alert alert-info"> 在这里编辑教师各项评价指标，系统已经将矩阵的四列的选项依次设置为“非常满意”“满意”“一般”“不满意”。</div>';
+            //elem += '<label >教师姓名</label><input class="form-control" value="' + star_target + '" placeholder="输入待评价教师姓名"><br>';
+            elem += '<div class="alert alert-info"> 在这里填写教师姓名，系统已经将矩阵的四列的选项依次设置为“非常满意”“满意”“一般”“不满意”。</div>';
             var items = options.split(",");
             for(i in items)
             {
