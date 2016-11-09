@@ -285,12 +285,12 @@
 
         if (!finish) return false;
 
-        console.log(as);
+        //console.log(as);
 
         var res = {
             ass: as
         };
-        console.log(res); //return;
+        //console.log(res); //return;
         $.ajax({
             type: 'post',
             dataType: 'json',
@@ -303,6 +303,8 @@
                 if (data.responseText == "Success") {
 
                     window.location.href = "@Url.Action("Message", "Home", new { id = "您已回答了本问卷，感谢您的参与！" })";
+                } else {
+                    alert("问卷提交失败！");
                 }
             },
             error: function (data) {
@@ -310,6 +312,8 @@
                 if (data.responseText == "Success") {
 
                     window.location.href = "@Url.Action("Message", "Home", new { id = "您已回答了本问卷，感谢您的参与！" })";
+                } else {
+                    alert("问卷提交失败！");
                 }
             }
         });

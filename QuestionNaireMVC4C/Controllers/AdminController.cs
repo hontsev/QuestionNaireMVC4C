@@ -956,7 +956,7 @@ namespace QuestionNaireMVC4C.Controllers
                 var info = ds.Tables[0].Rows;
                 for (int i = 0; i < info.Count; i++)
                 {
-                    string c_id = info[i][0].ToString().Replace("\t", "");
+                    string c_id = info[i][1].ToString().Replace("\t", "");
                     string sql = "SELECT id FROM Class_Teacher_Info WHERE ClassNumber='" + c_id + "'";
                     if (!DB.Exists(sql) && !string.IsNullOrEmpty(c_id))
                     {

@@ -66,19 +66,20 @@
             @if (Session["type"].ToString() == "1")
             {
                 <li>
+                    <a href="@Url.Action("CheckClassInfo","Admin")"><i class="fa fa-table fa-fw"></i> 查看课程</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("AddClassInfo","Admin")"><i class="fa fa-table fa-fw"></i> 添加课程</a>
+                </li>
+                <li style="border-top:2px solid #ccc;"> 
                     <a href="@Url.Action("CheckQn","Admin")"><i class="fa fa-edit fa-fw"></i> 查看问卷</a>
                 </li>
                 <li>
                     <a href="@Url.Action("AddQn","Admin")"><i class="fa fa-edit fa-fw"></i> 添加问卷</a>
                 </li>
-    <li>
-        <a href="@Url.Action("CheckClassInfo","Admin")"><i class="fa fa-table fa-fw"></i> 查看课程</a>
-    </li>
-    <li>
-        <a href="@Url.Action("AddClassInfo","Admin")"><i class="fa fa-table fa-fw"></i> 添加课程</a>
-    </li>
-    <li>
-        <a href="@Url.Action("CheckUser","Admin")"><i class="fa fa-users fa-fw"></i> 管理用户</a>
+
+    <li style="border-top:2px solid #ccc;">
+        <a href="@Url.Action("CheckUser","Admin")"><i class="fa fa-users fa-fw"></i> 用户管理</a>
     </li>
             }
             else if (Session["type"].ToString() == "2")
