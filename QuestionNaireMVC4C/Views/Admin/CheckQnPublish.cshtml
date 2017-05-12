@@ -10,11 +10,17 @@
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
-            <label class="form-control">问卷名：@ViewBag.qnname</label>
-            <label class="form-control">问卷地址：<a id="url" target="_blank" href="@ViewBag.qnurl">@ViewBag.qnurl</a></label>
-            <div class="col-md-4"></div>
-            <div class="col-md-4" id="code"></div>
-            <div class="col-md-4"></div>
+            <ul class="list-group">
+                <li class="list-group-item">问卷名：@ViewBag.qnname</li>
+                <li class="list-group-item">问卷地址：<a id="url" target="_blank" href="@ViewBag.qnurl" style="word-break:break-all;">@ViewBag.qnurl</a></li>
+                <li class="list-group-item">
+                    <p class="text-center" id="code"></p>
+
+
+                </li>
+
+            </ul>
+
         </div>
         <!-- /.panel-body -->
     </div>
