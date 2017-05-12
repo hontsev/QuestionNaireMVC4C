@@ -1,12 +1,13 @@
 ﻿@{
-    ViewBag.Title = "欢迎登录师资课程管理系统";
+    ViewBag.Title = "欢迎登录北航软件学院调研系统";
 }
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <link href="/Content/sb-admin-2.css" rel="stylesheet">
-    <link href="/Content/bootstrap.min.css" rel="stylesheet">
-    <link href="/Content/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="@Url.Content("~/favicon.ico")" rel="shortcut icon" type="image/x-icon">
+    <link href="@Url.Content("~/Content/sb-admin-2.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/bootstrap-theme.min.css")" rel="stylesheet">
     @*@Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")*@
     <meta charset="utf-8">
@@ -30,11 +31,11 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body style="background-image:url('@Url.Content("~/Image/bg.jpg")');background-size:100% 300%; ">
+<body style="background-image:url('@Url.Content("~/Image/bg.jpg")');background-size:cover; ">
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
+                <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">@ViewBag.Title</h3>
                     </div>

@@ -15,7 +15,7 @@
 
                 <form role="form" class="form-horizontal col-md-10" action="@Url.Action("UploadClassInfo","Admin")" method="post" enctype="multipart/form-data">
                     <p>
-                        <a href="@Url.Content("/课程添加模板.xls")">课程添加模板.xls</a>
+                        <a href="@Url.Content("~/课程添加模板.xls")">课程添加模板.xls</a>
                     </p>
                         <input class="col-md-8" type="file" name="infofile" id="infofile" value="" />
                         <input class="col-md-4 btn btn-primary " type="submit" value=" 开始上传" />
@@ -81,7 +81,7 @@
                             <div class="col-md-7">
                                 <select class="form-control" id="t_state" onchange="change_t_state()">
                                     <option value="0">-请选择-</option>
-                                    <option value="1">未接受</option>
+                                    <option value="1">不接受</option>
                                     <option value="2">接受</option>
                                 </select>
                             </div>
@@ -153,12 +153,12 @@
     <!-- /.panel -->
 </div>
 <!-- /.col-lg-12 -->
-<link href="/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet">
-<link href="/bower_components/datatables/media/css/jquery.dataTables_themeroller.css" rel="stylesheet">
-<link href="/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
-<script src="/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="/bower_components/datatables-responsive/js/dataTables.responsive.js"></script>
-<script src="/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+<link href="@Url.Content("~/bower_components/datatables/media/css/jquery.dataTables.min.css")" rel="stylesheet">
+<link href="@Url.Content("~/bower_components/datatables/media/css/jquery.dataTables_themeroller.css")" rel="stylesheet">
+<link href="@Url.Content("~/bower_components/datatables-responsive/css/dataTables.responsive.css")" rel="stylesheet">
+<script src="@Url.Content("~/bower_components/datatables/media/js/jquery.dataTables.min.js")"></script>
+<script src="@Url.Content("~/bower_components/datatables-responsive/js/dataTables.responsive.js")"></script>
+<script src="@Url.Content("~/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")"></script>
 <script>
     var table;
     $(document).ready(function () {
@@ -204,7 +204,7 @@
 
     function change_t_state() {
         if ($("#t_state").val() == "1") {
-            table.columns(8).search("未接受").draw();
+            table.columns(8).search("不接受").draw();
         }else if ($("#t_state").val() == "2") {
             table.columns(8).search("接受").draw();
         } else {

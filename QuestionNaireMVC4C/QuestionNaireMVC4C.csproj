@@ -214,6 +214,9 @@
   <ItemGroup>
     <Content Include="Views\Admin\CheckClassInfoDetail.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_Layout_student.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

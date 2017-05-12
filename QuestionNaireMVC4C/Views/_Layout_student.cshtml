@@ -35,72 +35,8 @@
 <body>
     <div id="wrapper">
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="@Url.Action("Index","Home")">北航软件学院调研系统 - @ViewBag.Title</a>
-
-            </div>
-
-            @if (!Object.Equals(Session["id"], null))
-{
-    using (Html.BeginForm("Logout", "Home", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("你好, " + Session["name"].ToString() + " !", "Userinfo", "Home")
-            </li>
-            <li>@Html.ActionLink("修改密码", "Userinfo", "Home")</li>
-            <li>@Html.ActionLink("登出", "Logout", "Home")</li>
-        </ul>
-    }
-}
-
-
-            <!-- /.navbar-top-links -->
-            <div class="navbar-default sidebar" role="navigation">
-                @if (!Object.Equals(Session["id"], null))
-{
-    <div class="sidebar-nav navbar-collapse">
-        <ul class="nav" id="side-menu">
-            @if (Session["type"].ToString() == "1")
-            {
-                <li>
-                    <a href="@Url.Action("AddClassInfo","Admin")"><i class="fa fa-table fa-fw"></i> 添加课程</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("CheckClassInfo","Admin")"><i class="fa fa-table fa-fw"></i> 查看课程</a>
-                </li>
-                
-                <li style="border-top:2px solid #ccc;"> 
-                    <a href="@Url.Action("CheckQn","Admin")"><i class="fa fa-edit fa-fw"></i> 查看问卷</a>
-                </li>
-                <li>
-                    <a href="@Url.Action("AddQn","Admin")"><i class="fa fa-edit fa-fw"></i> 添加问卷</a>
-                </li>
-
-    <li style="border-top:2px solid #ccc;">
-        <a href="@Url.Action("CheckUser","Admin")"><i class="fa fa-users fa-fw"></i> 用户管理</a>
-    </li>
-            }
-            else if (Session["type"].ToString() == "2")
-            {
-                <li>
-                    <a href="@Url.Action("CheckClassInfo","ProjectUser")"><i class="fa fa-table fa-fw"></i> 查看课程</a>
-                </li>
-            }
-        </ul>
-    </div>
-}
-
-
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
-        </nav>
         <!-- Page Content -->
-        <div id="page-wrapper">
+      
             <div class="container-fluid">
                 <div class="row">
                     @RenderBody()
@@ -109,7 +45,7 @@
 
             </div>
             <!-- /.container-fluid -->
-        </div>
+ 
         <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
@@ -123,3 +59,5 @@
         <script src="../dist/js/sb-admin-2.js"></script>*@
 </body>
 </html>
+
+
