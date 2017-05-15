@@ -127,6 +127,8 @@ namespace QuestionNaireMVC4C.Controllers
             return View();
         }
 
+
+
         /// <summary>
         /// 获取问卷回答数目。
         /// </summary>
@@ -373,6 +375,7 @@ namespace QuestionNaireMVC4C.Controllers
         /// <returns></returns>
         public static string getPublishCode(string str)
         {
+
             string code = "";
 
             string timestr = DateTime.Now.ToLongTimeString();
@@ -389,7 +392,6 @@ namespace QuestionNaireMVC4C.Controllers
         [HttpPost]
         public ActionResult SaveQn(QuestionNaire qn)
         {
-
             if (string.IsNullOrEmpty(qn.id))
             {
                 //new 
@@ -519,6 +521,7 @@ namespace QuestionNaireMVC4C.Controllers
         /// <param name="times"></param>
         private int getStarLevel(double[] times)
         {
+
             if (times.Length < 4) return 0;
             double sum = times[0] + times[1] + times[2] + times[3];
             if (sum <= 0) return 0;
@@ -904,7 +907,7 @@ namespace QuestionNaireMVC4C.Controllers
         {
             if (str.Contains(sym))
             {
-                return str.Split(new char[] { sym }, StringSplitOptions.RemoveEmptyEntries);
+                return str.Split(new char[] { sym }, StringSplitOptions.None);
             }
             else
             {
@@ -996,9 +999,9 @@ namespace QuestionNaireMVC4C.Controllers
                                     // multi options
                                     var tmp = safeSplit(text);
                                     foreach(var t in tmp){
-                                         answerstr += string.Format("{0},", t);
+                                         answerstr += string.Format("{0};", t);
                                     }
-                                    if (answerstr.EndsWith(",")) answerstr = answerstr.Substring(0, answerstr.Length - 1);
+                                    if (answerstr.EndsWith(";")) answerstr = answerstr.Substring(0, answerstr.Length - 1);
                                 str += string.Format(",{0}", answerstr);
                             }
                             else if(type=="3")
@@ -1052,7 +1055,7 @@ namespace QuestionNaireMVC4C.Controllers
                     //body
                     for (int i = 0; i < users.Length; i++)
                     {
-                        string[] tmpid = safeSplit(users[i].id.ToString(), '-');
+                        string[] tmpid = users[i].id.ToString().Split('-');
                         string ip = "";
                         if (tmpid.Length > 1) ip = tmpid[1].ToString();
                         str = string.Format("{0},{1}", i + 1, ip);
@@ -1072,9 +1075,9 @@ namespace QuestionNaireMVC4C.Controllers
                                 foreach (var t in tmp)
                                 {
                                     string tstr = safeSplit(questions.Rows[j]["options"].ToString())[int.Parse(t)];
-                                    answerstr += string.Format("{0},", tstr);
+                                    answerstr += string.Format("{0};", tstr);
                                 }
-                                if(answerstr.EndsWith(","))answerstr = answerstr.Substring(0, answerstr.Length - 1);
+                                if(answerstr.EndsWith(";"))answerstr = answerstr.Substring(0, answerstr.Length - 1);
                                 str += string.Format(",{0}", answerstr);
                             }
                             else if (type == "3")
@@ -1098,7 +1101,7 @@ namespace QuestionNaireMVC4C.Controllers
                 }
             }
 
-            string zipname = string.Format("问卷结果_{0}_{1}.zip",id,DateTime.Now.ToString("YYYYMMddHHmm"));
+            string zipname = string.Format("问卷结果_{0}_{1}.zip",id,DateTime.Now.ToString("yyyyMMddHHmm"));
             using (ZipFile zip = new ZipFile(System.Text.Encoding.Default))
             {
                 
@@ -1198,12 +1201,13 @@ namespace QuestionNaireMVC4C.Controllers
         {
             string u_id = Request["u_id"].ToString();
             string u_pw = "123";
+            string md5pw = BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(u_pw)), 4, 8).Replace("-", "");
             string u_type = Request["u_type"].ToString();
             if (!string.IsNullOrEmpty(u_id)
                 && !string.IsNullOrEmpty(u_type)
                 && !DB.Exists(string.Format("SELECT id FROM [user] WHERE name='{0}'", u_id)))
             {
-                string sql = string.Format("INSERT INTO [user](name,pw,type) VALUES('{0}','{1}','{2}')", u_id, u_pw, u_type);
+                string sql = string.Format("INSERT INTO [user](name,pw,type) VALUES('{0}','{1}','{2}')", u_id, md5pw, u_type);
                 DB.ExecuteSql(sql);
             }
             return RedirectToAction("CheckUser");
@@ -1223,7 +1227,8 @@ namespace QuestionNaireMVC4C.Controllers
         {
             if (!string.IsNullOrEmpty(id))
             {
-                string sql = string.Format("UPDATE [user] SET pw='123' WHERE id='{0}'", id);
+                string md5pw = BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes("123")), 4, 8).Replace("-", "");
+                string sql = string.Format("UPDATE [user] SET pw='{0}' WHERE id='{1}'", md5pw,id);
                 DB.ExecuteSql(sql);
             }
             return RedirectToAction("CheckUser");

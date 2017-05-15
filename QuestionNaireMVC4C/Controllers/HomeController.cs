@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace QuestionNaireMVC4C.Controllers
 {
@@ -45,7 +47,9 @@ namespace QuestionNaireMVC4C.Controllers
         [HttpPost]
         public ActionResult Login(string name, string pw)
         {
-            string sql = String.Format("SELECT id,name,[type] FROM [user] WHERE name='{0}' and pw='{1}'", name, pw);
+            string md5pw = BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(pw)), 4, 8).Replace("-", "");
+
+            string sql = String.Format("SELECT id,name,[type] FROM [user] WHERE name='{0}' and pw='{1}'", name, md5pw);
             if (DB.Exists(sql))
             {
                 var user = DB.GetResult(sql).Rows[0];
@@ -78,10 +82,12 @@ namespace QuestionNaireMVC4C.Controllers
         {
             if (!object.Equals(Session["id"], null))
             {
-                string sql = string.Format("SELECT id FROM [user] WHERE id='{0}' AND pw='{1}'", Session["id"].ToString(), oldPw);
-                if (DB.Exists(sql))
+                string md5oldPw = BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(oldPw)), 4, 8).Replace("-", "");
+                string sql = string.Format("SELECT id FROM [user] WHERE id='{0}' AND pw='{1}'", Session["id"].ToString(), md5oldPw);
+                if (DB.Exists(sql)&& newPw==newPw2)
                 {
-                    sql = string.Format("UPDATE [user] SET pw='{0}' WHERE id='{1}'", newPw, Session["id"].ToString());
+                    string md5newPw = BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(newPw)), 4, 8).Replace("-", "");
+                    sql = string.Format("UPDATE [user] SET pw='{0}' WHERE id='{1}'", md5newPw, Session["id"].ToString());
                     DB.ExecuteSql(sql);
                     return RedirectToAction("Logout");
                 }
