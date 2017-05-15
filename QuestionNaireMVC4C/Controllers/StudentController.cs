@@ -169,8 +169,7 @@ namespace QuestionNaireMVC4C.Controllers
         [HttpPost]
         public ActionResult SubmitQn(List<Answer> answers)
         {
-            Random ra = new Random();
-            string uid = CheckIP.GetIP() + ra.Next(10000000, 99999999).ToString();
+            string uid = DateTime.Now.ToString("yyyy/MM/dd/hh:mm:ss")+"-"+ CheckIP.GetIP() ;
 
             string sql = "";
 

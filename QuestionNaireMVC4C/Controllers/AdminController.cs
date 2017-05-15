@@ -15,6 +15,9 @@ using System.Xml;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.HSSF.UserModel;
+using Ionic.Zip;
+
+
 
 namespace QuestionNaireMVC4C.Controllers
 {
@@ -872,80 +875,247 @@ namespace QuestionNaireMVC4C.Controllers
             return Content("");
         }
 
-
-        
-
-        /// <summary>
-        /// 判断上传文件的后缀是否合法
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static bool isAllow(string filename)
+        private static string getQuestionTypeName(string typeid)
         {
-            string[] allowExtensions = { ".xls", ".xlsx" };
-            string fileExtension = System.IO.Path.GetExtension(filename).ToLower();
-            for (int i = 0; i < allowExtensions.Length; i++)
+            switch (typeid)
             {
-                if (fileExtension == allowExtensions[i])
+                case "1": return "单选题"; break;
+                case "2": return "多选题"; break;
+                case "3": return "简答题"; break;
+                case "4": return "矩阵单选题"; break;
+                case "5": return "矩阵单选题"; break;
+                default: return ""; break;
+            }
+        }
+
+        private static string getMatrixValueName(string num)
+        {
+            switch (num)
+            {
+                case "1": return "非常满意"; break;
+                case "2": return "满意"; break;
+                case "3": return "一般"; break;
+                case "4": return "不满意"; break;
+                default: return ""; break;
+            }
+        }
+
+        private static string[] safeSplit(string str,char sym=',')
+        {
+            if (str.Contains(sym))
+            {
+                return str.Split(new char[] { sym }, StringSplitOptions.RemoveEmptyEntries);
+            }
+            else
+            {
+                return new string[] { str };
+            }
+        }
+
+        public ActionResult GetQNResult(string id)
+        {
+            string path = Server.MapPath("~/Download/TMP/");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            string zippath = Server.MapPath("~/Download/ZIP/");
+            if (!Directory.Exists(zippath)) Directory.CreateDirectory(zippath);
+            string file1 = "code.csv";
+            string file2 = "All_Data_Original.csv";
+            string file3 = "All_Data_Readable.csv";
+            var questions = DB.GetResult(string.Format("SELECT id,introduction,type,options,star_target FROM question WHERE belong_qn='{0}'", id));
+            //HSSFWorkbook workbook = new HSSFWorkbook();
+            //ISheet sheet = workbook.CreateSheet();
+
+            using (FileStream fs = new FileStream(path + file1, FileMode.Create, FileAccess.Write))
+            {
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
                 {
-                    return true;
+                    for (int i = 0; i < questions.Rows.Count; i++)
+                    {
+                        sw.WriteLine(string.Format("Q{0},{1},{2}", i + 1, questions.Rows[i]["introduction"].ToString(),getQuestionTypeName(questions.Rows[i]["type"].ToString())));
+                        sw.WriteLine(string.Format(",本题选项:"));
+                        string[] options = safeSplit(questions.Rows[i]["options"].ToString());
+                        for (int j = 0; j < options.Length; j++)
+                        {
+                            sw.WriteLine(string.Format(",{0},{1}", j + 1, options[j]));
+                        }
+                    }
                 }
             }
-            return false;
-        }
 
-        public DataSet ExcelDataSource(string filepath, string sheetname)
-        {
-            string strConn;
-            if (Path.GetExtension(filepath).ToLower() == ".xlsx")
-            {
-                strConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filepath + ";Extended Properties=Excel 12.0";
-            }
-            else
-            {
-                strConn = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filepath + ";Extended Properties=Excel 8.0;";
-            }
-            OleDbConnection conn = new OleDbConnection(strConn);
-            OleDbDataAdapter oada = new OleDbDataAdapter("select * from [" + sheetname + "]", strConn);
-            DataSet ds = new DataSet();
-            oada.Fill(ds);
-            conn.Close();
-            return ds;
-        }
 
-        /// <summary>
-        /// 获得Excel中的所有sheetname。
-        /// </summary>
-        /// <param name="filepath"></param>
-        /// <returns></returns>
-        public ArrayList ExcelSheetName(string filepath)
-        {
-            ArrayList al = new ArrayList();
-            string strConn;
-            if (Path.GetExtension(filepath).ToLower() == ".xlsx")
+            var answers = DB.GetResult(string.Format("SELECT belong_user,answer,belong_q FROM answer WHERE belong_user IN (SELECT distinct belong_user FROM answer WHERE belong_q='{0}')", questions.Rows[0]["id"]));
+            var users = answers.AsEnumerable()
+                .Select(p => new
+                {
+                    id = p.Field<string>("belong_user")
+                }).Distinct().ToArray();
+
+            using (FileStream fs = new FileStream(path + file2, FileMode.Create, FileAccess.Write))
             {
-                strConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filepath + ";Extended Properties=Excel 12.0";
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+                {
+                    //head
+                    var str = "seq,ip";
+                    for (int j = 0; j < questions.Rows.Count; j++)
+                    {
+                        string type = questions.Rows[j]["type"].ToString();
+                        if (type == "1" || type == "2" || type == "3")
+                        {
+                            //one column
+                            str += string.Format(",Q{0}", j + 1);
+                        }
+                        else if(type=="4" || type=="5")
+                        {
+                            //each option one column
+                            string[] colname = safeSplit(questions.Rows[j]["options"].ToString());
+                            for (int s = 0; s < colname.Length; s++)
+                            {
+                                str += string.Format(",Q{0}_{1}", j + 1, s + 1);
+                            }
+                        }
+                    }
+                    sw.WriteLine(str);
+
+                    //body
+                    for (int i = 0; i < users.Length; i++)
+                    {
+                        string[] tmpid = users[i].id.ToString().Split('-');
+                        string ip = "";
+                        if (tmpid.Length > 1) ip = tmpid[1].ToString();
+                        str = string.Format("{0},{1}", i + 1, ip);
+
+                        for (int j = 0; j < questions.Rows.Count; j++)
+                        {
+                            string type = questions.Rows[j]["type"].ToString();
+                            string text = answers.Select(string.Format("belong_user='{0}' and belong_q='{1}'", users[i].id.ToString(), questions.Rows[j]["id"].ToString()))[0]["answer"].ToString();
+
+                            if (type == "1" || type == "2" )
+                            {
+                                //one column
+                                string answerstr="";
+                                    // multi options
+                                    var tmp = safeSplit(text);
+                                    foreach(var t in tmp){
+                                         answerstr += string.Format("{0},", t);
+                                    }
+                                    if (answerstr.EndsWith(",")) answerstr = answerstr.Substring(0, answerstr.Length - 1);
+                                str += string.Format(",{0}", answerstr);
+                            }
+                            else if(type=="3")
+                            {
+                                // original text
+                                str += string.Format(",{0}", text.Replace("\n", "").Replace("\r", "").Replace(",", "，"));
+                            }
+                            else if (type == "4" || type == "5")
+                            {
+                                //each option one column
+                                string[] tanswers = safeSplit(text);
+                                foreach (var t in tanswers)
+                                {
+                                    str += string.Format(",{0}", t);
+                                }
+                            }
+                        }
+                        sw.WriteLine(str);
+                    }
+                }
             }
-            else
+
+            
+
+            using (FileStream fs = new FileStream(path + file3, FileMode.Create, FileAccess.Write))
             {
-                strConn = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filepath + ";Extended Properties=Excel 8.0;";
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+                {
+                    //head
+                    var str = "答卷编号,IP地址";
+                    for (int j = 0; j < questions.Rows.Count; j++)
+                    {
+                        string type = questions.Rows[j]["type"].ToString();
+                        if (type == "1" || type == "2" || type == "3")
+                        {
+                            //one column
+                            str += string.Format(",Q{0}_{1}", j + 1, questions.Rows[j]["introduction"].ToString());
+                        }
+                        else if (type == "4" || type == "5")
+                        {
+                            //each option one column
+                            string[] colname = questions.Rows[j]["options"].ToString().Split(',');
+                            foreach (var c in colname)
+                            {
+                                str += string.Format(",Q{0}_{1}_{2}", j + 1, questions.Rows[j]["introduction"].ToString(), c);
+                            }
+                        }
+                    }
+                    sw.WriteLine(str);
+
+                    //body
+                    for (int i = 0; i < users.Length; i++)
+                    {
+                        string[] tmpid = safeSplit(users[i].id.ToString(), '-');
+                        string ip = "";
+                        if (tmpid.Length > 1) ip = tmpid[1].ToString();
+                        str = string.Format("{0},{1}", i + 1, ip);
+
+                        for (int j = 0; j < questions.Rows.Count; j++)
+                        {
+                            string type = questions.Rows[j]["type"].ToString();
+                            string text = answers.Select(string.Format("belong_user='{0}' and belong_q='{1}'", users[i].id.ToString(), questions.Rows[j]["id"].ToString()))[0]["answer"].ToString();
+
+                            if (type == "1" || type == "2")
+                            {
+                                //one column
+                                string answerstr = "";
+
+                                // multi options
+                                var tmp = safeSplit(text);
+                                foreach (var t in tmp)
+                                {
+                                    string tstr = safeSplit(questions.Rows[j]["options"].ToString())[int.Parse(t)];
+                                    answerstr += string.Format("{0},", tstr);
+                                }
+                                if(answerstr.EndsWith(","))answerstr = answerstr.Substring(0, answerstr.Length - 1);
+                                str += string.Format(",{0}", answerstr);
+                            }
+                            else if (type == "3")
+                            {
+                                // original text
+                                str += string.Format(",{0}", text.Replace("\n", "").Replace("\r", "").Replace(",", "，"));
+                            }
+                            else if (type == "4" || type == "5")
+                            {
+                                //each option one column
+                                string[] tanswers = safeSplit(text);
+                                foreach (var t in tanswers)
+                                {
+                                    string tstr = getMatrixValueName(t);
+                                    str += string.Format(",{0}", tstr);
+                                }
+                            }
+                        }
+                        sw.WriteLine(str);
+                    }
+                }
             }
-            OleDbConnection conn = new OleDbConnection(strConn);
-            conn.Open();
-            System.Data.DataTable sheetNames = conn.GetOleDbSchemaTable
-            (System.Data.OleDb.OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
-            conn.Close();
-            foreach (DataRow dr in sheetNames.Rows)
+
+            string zipname = string.Format("问卷结果_{0}_{1}.zip",id,DateTime.Now.ToString("YYYYMMddHHmm"));
+            using (ZipFile zip = new ZipFile(System.Text.Encoding.Default))
             {
-                al.Add(dr[2]);
+                
+                zip.AddFile(path + file1, "");
+                zip.AddFile(path + file2, "");
+                zip.AddFile(path + file3, "");
+                zip.Save(zippath + zipname);
+                return File(zippath + zipname, "application/zip", zipname);
             }
-            return al;
         }
+        
+
 
         public ActionResult UploadClassInfo()
         {
             HttpPostedFileBase file = Request.Files["infofile"];
-            if (file != null && isAllow(file.FileName))
+            if (file != null && ExcelHelper.isAllow(file.FileName))
             {
                 //存储文件
                 string root = HttpContext.Server.MapPath("../Uploads");
@@ -953,7 +1123,7 @@ namespace QuestionNaireMVC4C.Controllers
                 string filepath = Path.Combine(root, Path.GetFileName(file.FileName));
                 file.SaveAs(filepath);
                 //读取文件
-                DataSet ds = ExcelDataSource(filepath, ExcelSheetName(filepath)[0].ToString());
+                DataSet ds = ExcelHelper.ExcelDataSource(filepath, ExcelHelper.ExcelSheetName(filepath)[0].ToString());
                 var info = ds.Tables[0].Rows;
                 for (int i = 0; i < info.Count; i++)
                 {
