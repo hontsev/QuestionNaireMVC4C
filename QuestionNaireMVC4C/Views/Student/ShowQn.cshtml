@@ -114,7 +114,7 @@
 
 
 
-    function printQuestion(id,type, title, options) {
+    function printQuestion(id,type, title, options,star_target) {
 
         var q = $("#questions");
         var num = q.find(".panel-default").length;
@@ -128,8 +128,18 @@
             elem += '<div class="panel panel-body">';
             elem += '<h4>' + title + '</h4>';
             var items = options.split(",");
-            for (i = 1; i <= items.length; i++) {
-                elem += '<div class="radio"><label><input type="radio" name="q_' + id + '" value="' + i + '">' + items[i - 1] + '</label></div>';
+            if (star_target == "True") {
+                //use select list
+                elem += '<select class="form-control qn-select">'
+                for (i = 1; i <= items.length; i++) {
+                    elem += '<option  name="q_' + id + '" value="' + i + '">' + items[i - 1] + '</option>';
+                }
+                elem += '</select>'
+            }
+            else {
+                for (i = 1; i <= items.length; i++) {
+                    elem += '<div class="radio"><label><input type="radio" name="q_' + id + '" value="' + i + '">' + items[i - 1] + '</label></div>';
+                }
             }
             elem += '</div>';
             elem += '</div>';
@@ -218,8 +228,15 @@
             type = $(this).find(".panel-heading").first().find("font").first().text();
             console.log(id);
             if (type == "单选题") {
-                input = $(this).find("input[name='q_" + id + "']:checked").first().val();
-                a.answer = input;
+
+                if ($(this).find(".qn-select").length > 0) {
+                    // use select
+                    input = $(this).find("option:selected").first().val();
+                    a.answer = input;
+                } else {
+                    input = $(this).find("input[name='q_" + id + "']:checked").first().val();
+                    a.answer = input;
+                }
                 if (typeof (input) == "undefined" || input.length <= 0 || input.indexOf("undefine") != -1) {
                     alert("请完成全部问题！");
                     finish = false;
@@ -330,7 +347,7 @@
                 @Html.Raw("$('#qn_introduction').val('" + ViewBag.qn.introduction + "');");
                 foreach (var q in ViewBag.qn.questions)
                 {
-                    @Html.Raw("printQuestion('" + q.id + "','" + q.type + "','" + q.title + "','" + q.options + "');");
+                    @Html.Raw("printQuestion('" + q.id + "','" + q.type + "','" + q.title + "','" + q.options + "','"+q.star_target+"');");
                 }
             }
         }

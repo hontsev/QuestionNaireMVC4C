@@ -93,7 +93,7 @@ namespace QuestionNaireMVC4C.Controllers
                         qn.title = qnr[1].ToString();
                         qn.introduction = qnr[2].ToString();
                         List<Question> qs = new List<Question>();
-                        sql = string.Format("SELECT type,introduction,options,id FROM question WHERE belong_qn='{0}' ORDER BY id", qnid);
+                        sql = string.Format("SELECT type,introduction,options,id,star_target FROM question WHERE belong_qn='{0}' ORDER BY id", qnid);
                         var qst = DB.GetResult(sql);
                         for (int i = 0; i < qst.Rows.Count; i++)
                         {
@@ -102,6 +102,7 @@ namespace QuestionNaireMVC4C.Controllers
                             nq.title = qst.Rows[i][1].ToString();
                             nq.options = qst.Rows[i][2].ToString();
                             nq.id = Int32.Parse(qst.Rows[i][3].ToString());
+                            nq.star_target = qst.Rows[i]["star_target"].ToString();
                             qs.Add(nq);
                         }
                         qn.questions = qs;

@@ -130,7 +130,11 @@
             elem += '<div class="panel-default">';
             elem += '<div class="panel panel-heading">' + '第 <label>' + num + '</label> 题 - <font color="gray">单选题</font> <a class="btn btn-danger" onclick="deleteQuestion(this)">删除</a>' + '</div>';
             elem += '<div class="panel panel-body">';
-            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br>';
+            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br><div class="checkbox"> ';
+            if(star_target=="True")
+                elem += '<label><input type="checkbox" class="qn-checkbox" checked="checked">以下拉框形式展现 </label></div><br>';
+            else
+                elem += '<label><input type="checkbox" class="qn-checkbox" >以下拉框形式展现 </label></div><br>';
             //elem += '<div class="checkbox"><label><input type="checkbox" value="1"';
             //if (parseInt(star_target) == 1) {
             //    elem += ' checked="checked" ';
@@ -271,6 +275,8 @@
                 input = $(this).find("input");
                 title = input.val();
                 options = "";
+                usedropdown = $(this).find(".qn-checkbox").is(':checked');
+                console.log(usedropdown);
                 $(this).find(".qn-item").each(function () {
                     options += $(this).val() + ",";
                 });
@@ -284,6 +290,7 @@
                 q.type = "1";
                 q.title = title;
                 q.options = options;
+                q.star_target = usedropdown;
                 //q.is_starlevel = is_starlevel;
             } else if (type == "多选题") {
                 input = $(this).find("input");

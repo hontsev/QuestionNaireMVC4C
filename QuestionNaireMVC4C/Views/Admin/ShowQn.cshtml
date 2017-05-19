@@ -42,7 +42,7 @@
 
 <script>
 
-    function printQuestion(id,type, title, options) {
+    function printQuestion(id,type, title, options,star_target) {
 
         var q = $("#questions");
         var num = q.find(".panel-default").length;
@@ -56,9 +56,20 @@
             elem += '<div class="panel panel-body">';
             elem += '<h4>' + title + '</h4>';
             var items = options.split(",");
-            for (i = 1; i <= items.length; i++) {
-                elem += '<div class="radio"><label><input type="radio" name="q_' + id + '" value="' + i + '">' + items[i - 1] + '</label></div>';
+            if (star_target == "True") {
+                //use select list
+                elem += '<select class="form-control qn-select">'
+                for (i = 1; i <= items.length; i++) {
+                    elem += '<option  name="q_' + id + '" value="' + i + '">' + items[i - 1] + '</option>';
+                }
+                elem+='</select>'
             }
+            else {
+                for (i = 1; i <= items.length; i++) {
+                    elem += '<div class="radio"><label><input type="radio" name="q_' + id + '" value="' + i + '">' + items[i - 1] + '</label></div>';
+                }
+            }
+
             elem += '</div>';
             elem += '</div>';
             q.append(elem);
@@ -145,7 +156,7 @@
                 @Html.Raw("$('#qn_introduction').val('" + ViewBag.qn.introduction + "');");
                 foreach (var q in ViewBag.qn.questions)
                 {
-                    @Html.Raw("printQuestion('" + q.id + "','" + q.type + "','" + q.title + "','" + q.options + "');");
+                    @Html.Raw("printQuestion('" + q.id + "','" + q.type + "','" + q.title + "','" + q.options +"','"+q.star_target+ "');");
                 }
             }
         }

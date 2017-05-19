@@ -27,7 +27,6 @@ namespace QuestionNaireMVC4C.Controllers
         public string title { get; set; }
         public string type { get; set; }
         public string options { get; set; }
-
         public string star_target { get; set; }
 
     }
@@ -451,15 +450,16 @@ namespace QuestionNaireMVC4C.Controllers
                     qn.title = qnr[1].ToString();
                     qn.introduction = qnr[2].ToString();
                     List<Question> qs = new List<Question>();
-                    sql = string.Format("SELECT type,introduction,options,id FROM question WHERE belong_qn='{0}' ORDER BY id", qnid);
+                    sql = string.Format("SELECT type,introduction,options,id,star_target FROM question WHERE belong_qn='{0}' ORDER BY id", qnid);
                     var qst = DB.GetResult(sql);
                     for (int i = 0; i < qst.Rows.Count; i++)
                     {
                         Question nq = new Question();
-                        nq.type = qst.Rows[i][0].ToString();
-                        nq.title = qst.Rows[i][1].ToString();
-                        nq.options = qst.Rows[i][2].ToString();
-                        nq.id = Int32.Parse(qst.Rows[i][3].ToString());
+                        nq.type = qst.Rows[i]["type"].ToString();
+                        nq.title = qst.Rows[i]["introduction"].ToString();
+                        nq.options = qst.Rows[i]["options"].ToString();
+                        nq.id = Int32.Parse(qst.Rows[i]["id"].ToString());
+                        nq.star_target = qst.Rows[i]["star_target"].ToString();
                         qs.Add(nq);
                     }
                     qn.questions = qs;
@@ -1074,7 +1074,7 @@ namespace QuestionNaireMVC4C.Controllers
                                 var tmp = safeSplit(text);
                                 foreach (var t in tmp)
                                 {
-                                    string tstr = safeSplit(questions.Rows[j]["options"].ToString())[int.Parse(t)];
+                                    string tstr = safeSplit(questions.Rows[j]["options"].ToString())[int.Parse(t)-1];
                                     answerstr += string.Format("{0};", tstr);
                                 }
                                 if(answerstr.EndsWith(";"))answerstr = answerstr.Substring(0, answerstr.Length - 1);
