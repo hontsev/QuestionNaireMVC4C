@@ -7,14 +7,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.IO;
 using System.Data;
-using System.Data.Sql;
-using System.Data.OleDb;
-using System.Data.SqlClient;
-using System.Collections;
-using System.Xml;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
-using NPOI.HSSF.UserModel;
 using Ionic.Zip;
 
 
@@ -428,7 +420,7 @@ namespace QuestionNaireMVC4C.Controllers
                 }
             }
 
-            return Content("Success");
+            return Content(qn.id);
         }
 
         /// <summary>

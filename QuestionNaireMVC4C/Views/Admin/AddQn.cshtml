@@ -2,121 +2,125 @@
     ViewBag.Title = "编辑问卷";
     Layout = "~/Views/_Layout.cshtml";
 }
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                @ViewBag.Title
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-10">
-                        <form role="form">
-                            <input type="hidden" id="qn_id" value="" />
-                            <div class="form-group">
-                                <label>问卷标题</label>
-                                <input class="form-control" id="qn_title">
-                            </div>
-                            <div class="form-group">
-                                <label>问卷简介</label>
-                                <textarea class="form-control" rows="3" id="qn_introduction"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>问题列表</label>
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-10" id="qncontent">
+                    <form role="form">
+                        <input type="hidden" id="qn_id" value="" />
+                        <div class="form-group">
+                            <label>问卷标题</label>
+                            <input class="form-control" id="qn_title">
+                        </div>
+                        <div class="form-group">
+                            <label>问卷简介</label>
+                            <textarea class="form-control" rows="3" id="qn_introduction"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>问题列表</label>
 
-                                <div class="panel panel-default">
+                            <div class="panel panel-default">
 
 
-                                    <div class="panel-body">
-                                        <div id="questions">
-                                            @*<div class="panel-default">
-                                                    <div class="panel panel-heading">
-                                                        第 <label>1</label> 题 - 单选题 <a class="btn btn-danger">删除</a>
-                                                    </div>
-                                                    <div class="panel panel-body">
-                                                        <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？">
-                                                        <label class="col-lg-2">选项 1 </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
-                                                        <label class="col-lg-2">选项 2  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
-                                                        <label class="col-lg-2">选项 3  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
-                                                        <label class="col-lg-2">选项 4  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
-                                                    </div>
-
+                                <div class="panel-body">
+                                    <div id="questions">
+                                        @*<div class="panel-default">
+                                                <div class="panel panel-heading">
+                                                    第 <label>1</label> 题 - 单选题 <a class="btn btn-danger">删除</a>
                                                 </div>
-                                                <div class="panel-default">
-                                                    <div class="panel panel-heading">
-                                                        第 2 题 - 多选题
-                                                    </div>
-                                                    <div class="panel panel-body">
-                                                        <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"><br>
-                                                        <label class="col-lg-2">选项 1 </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
-                                                        <label class="col-lg-2">选项 2  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
-                                                        <label class="col-lg-2">选项 3  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
-                                                        <label class="col-lg-2">选项 4  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
-                                                    </div>
-
+                                                <div class="panel panel-body">
+                                                    <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？">
+                                                    <label class="col-lg-2">选项 1 </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                    <label class="col-lg-2">选项 2  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                    <label class="col-lg-2">选项 3  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                    <label class="col-lg-2">选项 4  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
                                                 </div>
-                                                <div class="panel-default">
-                                                    <div class="panel panel-heading">
-                                                        第 3 题 - 简答题
-                                                    </div>
-                                                    <div class="panel panel-body">
-                                                        <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"><br>
-                                                    </div>
 
+                                            </div>
+                                            <div class="panel-default">
+                                                <div class="panel panel-heading">
+                                                    第 2 题 - 多选题
                                                 </div>
-                                                <div class="panel-default">
-                                                    <div class="panel panel-heading">
-                                                        第 4 题 - 矩阵单选题
-                                                    </div>
-                                                    <div class="panel panel-body">
-                                                        <input class="form-control" value="评价各位老师。"><br>
-                                                        <div class="col-lg-5"><input class="form-control qn-item" value="老师一"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>
-                                                        <div class="col-lg-5"><input class="form-control qn-item" value="老师二"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>
-                                                        <div class="col-lg-10"><a class="btn btn-info" onclick="addItem(this)">+</a></div>
-                                                    </div>
+                                                <div class="panel panel-body">
+                                                    <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"><br>
+                                                    <label class="col-lg-2">选项 1 </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                    <label class="col-lg-2">选项 2  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                    <label class="col-lg-2">选项 3  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                    <label class="col-lg-2">选项 4  </label><div class="col-lg-10"><input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"></div>
+                                                </div>
 
-                                                </div>*@
-                                        </div>
+                                            </div>
+                                            <div class="panel-default">
+                                                <div class="panel panel-heading">
+                                                    第 3 题 - 简答题
+                                                </div>
+                                                <div class="panel panel-body">
+                                                    <input class="form-control" value="阿萨德爱的撒旦的 撒旦 的？"><br>
+                                                </div>
 
-                                        <hr>
-                                        <div class="col-md-2">
-                                            <label> 问题类型</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <select class="form-control" id="selectQType">
-                                                <option>单选题</option>
-                                                <option>多选题</option>
-                                                <option>简答题</option>
-                                                <option>矩阵单选题（评价教师）</option>
-                                                <option>矩阵单选题（评价课程）</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <a type="button" class="btn btn-info" onclick="addQuestion()">
-                                                添加问题
-                                            </a>
-                                        </div>
+                                            </div>
+                                            <div class="panel-default">
+                                                <div class="panel panel-heading">
+                                                    第 4 题 - 矩阵单选题
+                                                </div>
+                                                <div class="panel panel-body">
+                                                    <input class="form-control" value="评价各位老师。"><br>
+                                                    <div class="col-lg-5"><input class="form-control qn-item" value="老师一"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>
+                                                    <div class="col-lg-5"><input class="form-control qn-item" value="老师二"></div><div class="col-lg-7"><a class="btn btn-danger" onclick="deleteItem(this)">x</a></div>
+                                                    <div class="col-lg-10"><a class="btn btn-info" onclick="addItem(this)">+</a></div>
+                                                </div>
 
-
+                                            </div>*@
                                     </div>
+
+                                    <hr>
+                                    <div class="col-md-2">
+                                        <label> 问题类型</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-control" id="selectQType">
+                                            <option>单选题</option>
+                                            <option>多选题</option>
+                                            <option>简答题</option>
+                                            <option>矩阵单选题（评价教师）</option>
+                                            <option>矩阵单选题（评价课程）</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a type="button" class="btn btn-info" onclick="addQuestion()">
+                                            添加问题
+                                        </a>
+                                    </div>
+
+
                                 </div>
                             </div>
-                            <a href="javascript:saveQn()" class="btn btn-primary">保存问卷</a>
-                            <button class="btn btn-default" onclick="history.go(-1)">返回</button>
-                            @*<a href="javascript:history.go(-1)" class="btn btn-default">返回</a>*@
-                        </form>
-                    </div>
-
+                        </div>
+                        <a href="javascript:saveQn(true)" class="btn btn-primary">保存问卷</a>
+                        <button class="btn btn-default" onclick="history.go(-1)">返回</button>
+                        @*<a href="javascript:history.go(-1)" class="btn btn-default">返回</a>*@
+                    </form>
                 </div>
-                <!-- /.row (nested) -->
+
             </div>
-            <!-- /.panel-body -->
+            <!-- /.row (nested) -->
         </div>
-        <!-- /.panel -->
+        <!-- /.panel-body -->
     </div>
-    <!-- /.col-lg-12 -->
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
 
 
 <script>
+    $('#qncontent').change(function () {
+        saveQn(false);
+        //alert('woo');
+    });
 
     function printQuestion(type, title, options, star_target) {
 
@@ -130,11 +134,7 @@
             elem += '<div class="panel-default">';
             elem += '<div class="panel panel-heading">' + '第 <label>' + num + '</label> 题 - <font color="gray">单选题</font> <a class="btn btn-danger" onclick="deleteQuestion(this)">删除</a>' + '</div>';
             elem += '<div class="panel panel-body">';
-            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br><div class="checkbox"> ';
-            if(star_target=="True")
-                elem += '<label><input type="checkbox" class="qn-checkbox" checked="checked">以下拉框形式展现 </label></div><br>';
-            else
-                elem += '<label><input type="checkbox" class="qn-checkbox" >以下拉框形式展现 </label></div><br>';
+            elem += '<input class="form-control" value="' + title + '" placeholder="输入问题描述"><br>';
             //elem += '<div class="checkbox"><label><input type="checkbox" value="1"';
             //if (parseInt(star_target) == 1) {
             //    elem += ' checked="checked" ';
@@ -249,12 +249,14 @@
     }
 
     //保存问卷
-    function saveQn() {
+    function saveQn(refresh) {
 
         if ($('#qn_title').val().length <= 0 || $("#qn_introduction").val().length <= 0) {
+            if(refresh==true)
             alert("请填写问卷名称与简介。");
             return false;
         } else if ($("#questions").find(".panel-default").length <= 0) {
+            if (refresh == true)
             alert("问卷请至少添加一道题目！");
             return false;
         }
@@ -275,8 +277,6 @@
                 input = $(this).find("input");
                 title = input.val();
                 options = "";
-                usedropdown = $(this).find(".qn-checkbox").is(':checked');
-                console.log(usedropdown);
                 $(this).find(".qn-item").each(function () {
                     options += $(this).val() + ",";
                 });
@@ -290,7 +290,6 @@
                 q.type = "1";
                 q.title = title;
                 q.options = options;
-                q.star_target = usedropdown;
                 //q.is_starlevel = is_starlevel;
             } else if (type == "多选题") {
                 input = $(this).find("input");
@@ -345,7 +344,7 @@
             qs.push(q);
         });
 
-        console.log(qs);
+        //console.log(qs);
 
         var res = {
             id:$("#qn_id").val(),
@@ -353,7 +352,7 @@
             introduction: $("#qn_introduction").val(),
             questions: qs
         };
-        console.log(res); //return;
+        //console.log(res); //return;
         $.ajax({
             type: 'post',
             dataType: 'json',
@@ -362,19 +361,18 @@
             data: JSON.stringify(res),
             //async: false,
             success: function (data) {
-                console.log(data.responseText);
-                if (data.responseText == "Success") {
-
+                $("#qn_id").val(data);
+                //console.log(data.responseText);
+                    if (refresh == true)
                     window.location.href = "@Url.Action("CheckQn","Admin")";
-                }
+
                 //console.debug(data);
             },
             error: function (data) {
-                console.log(data.responseText);
-                if (data.responseText == "Success") {
+                //console.log(data.responseText);
+                    @*if (refresh == true)
+                    window.location.href = "@Url.Action("CheckQn","Admin")";*@
 
-                    window.location.href = "@Url.Action("CheckQn","Admin")";
-                }
                 //console.debug(data);
             }
         });
